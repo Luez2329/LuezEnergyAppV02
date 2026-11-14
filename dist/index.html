@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Monitoreo y control mensual de tarifas eléctricas MT3, MT4, BT3 y BT5B">
+  <title>Control Tarifario Eléctrico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>.mt4-hero{background:linear-gradient(120deg,#4c1d5f,#7e3a8a)}.curve-controls{grid-template-columns:repeat(5,1fr) auto}.curve-controls select{border:1px solid var(--line);border-radius:10px;background:#fbfcfb;padding:10px 12px;color:var(--ink)}.workflow-gate{margin:4px 0 22px;padding:20px;border-radius:18px;background:linear-gradient(135deg,#10231f,#174b42);color:#fff}.workflow-head{display:flex;justify-content:space-between;align-items:center;gap:16px}.workflow-head h3{margin:2px 0;font:750 21px Manrope}.workflow-head p{margin:5px 0 0;color:#c7d7d1;font-size:12px}.workflow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.workflow-step{padding:14px;border:1px solid rgba(255,255,255,.18);border-radius:13px;background:rgba(255,255,255,.07)}.workflow-step b{display:block;margin:5px 0;font-size:13px}.workflow-step small{color:#c7d7d1;line-height:1.4}.workflow-step.disabled{opacity:.45}.workflow-number{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--lime);color:var(--ink);font-weight:800;font-size:12px}.is-hidden{display:none!important}.bt5b-path{margin:18px 0;padding:18px;border-radius:14px;background:#eef5ff;border:1px solid #c9dcf5;color:#17324d}.bt5b-path h3{margin:0 0 6px}.bt5b-path p{margin:0;line-height:1.5}.battery-planner{margin-top:22px;padding:24px;border:1px solid var(--line);border-radius:18px;background:#f8faf8}.battery-planner .panel-title p:not(.eyebrow){margin:5px 0 0;color:var(--muted);font-size:12px}.battery-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:18px 0}.battery-grid label{display:flex;flex-direction:column;gap:6px;color:#40514c;font-size:11px;font-weight:700}.battery-grid input{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 12px;color:var(--ink)}.battery-grid input[readonly]{background:#edf2ef}.battery-metrics{grid-template-columns:repeat(4,1fr);margin:0}.battery-action{margin-top:14px;padding:14px 16px;border-radius:12px;background:#e7efeb;color:#40514c;font-size:13px;font-weight:700}.battery-action.good{background:#dcfce7;color:#166534}.battery-action.warn{background:#fef3c7;color:#92400e}.battery-action.danger{background:#fee2e2;color:#991b1b}.solar-sizing{margin-top:20px;padding:20px;border:1px solid #e5d79d;border-radius:16px;background:#fffaf0}.solar-sizing h3{font:750 20px Manrope;margin:3px 0}.solar-grid{grid-template-columns:repeat(4,1fr)}.solar-metrics{grid-template-columns:repeat(4,1fr);margin:0}.battery-result-chart,.battery-comparison{margin-top:20px;padding:20px;border-radius:16px;background:#fff;border:1px solid var(--line)}.battery-chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:12px}.battery-chart-head h3,.battery-comparison h3{font:750 20px Manrope;margin:3px 0}.battery-chart-summary{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:11px}.battery-chart-summary span{display:flex;flex-direction:column;gap:3px}.battery-chart-summary b{color:var(--ink);font-size:14px}.battery-chart-note,.comparison-note{margin:8px 0 0;color:var(--muted);font-size:12px}.battery-result-chart .chart-wrap{min-height:330px}.scenario-source{color:var(--muted);font-size:11px}.factor-delta{font-weight:700;color:var(--green)}.mt4-rate-grid{grid-template-columns:repeat(3,1fr);margin:16px 0 20px;padding:16px;background:#f8faf8;border-radius:14px}.charge-breakdown{margin-top:22px}.charge-breakdown h4{font:700 16px Manrope;margin:0 0 10px}.charge-total td{font-weight:800;background:#f3f7f5}@media(max-width:1000px){.curve-controls{grid-template-columns:repeat(2,1fr)}.workflow-steps{grid-template-columns:repeat(2,1fr)}.battery-grid,.mt4-rate-grid,.solar-grid{grid-template-columns:repeat(2,1fr)}.battery-metrics,.solar-metrics{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.curve-controls,.workflow-steps,.battery-grid,.battery-metrics,.mt4-rate-grid,.solar-grid,.solar-metrics{grid-template-columns:1fr}.battery-chart-head,.workflow-head{flex-direction:column;align-items:flex-start}}</style>
+  <style>.simple-flow-note{margin:0 0 18px;padding:16px 18px;border-left:5px solid var(--green);border-radius:12px;background:#edf8f3;color:#27453d;line-height:1.55}.simple-flow-note b{color:var(--ink)}.battery-grid.simple-inputs{grid-template-columns:repeat(4,1fr);padding:16px;border-radius:14px;background:#eef4f1}.result-highlight{border:2px solid #b8d9cc;background:#fff}.result-highlight strong{color:#0f766e}.constraint-status{margin-top:10px;font-size:12px}.advanced-results{margin-top:20px}.advanced-results>summary{cursor:pointer;padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--green);font-weight:800}.advanced-results[open]>summary{border-radius:14px 14px 0 0}.advanced-results .battery-comparison{margin-top:0;border-top:0;border-radius:0 0 16px 16px}.solar-rule{margin:12px 0 0;color:#6b5b1f;font-size:12px;line-height:1.5}@media(max-width:1000px){.battery-grid.simple-inputs{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.battery-grid.simple-inputs{grid-template-columns:1fr}}</style>
+  <style>.app-stage-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 22px;padding:8px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 12px 30px rgba(20,55,45,.07);position:sticky;top:8px;z-index:20}.app-stage-tab{display:flex;align-items:center;gap:11px;border:0;border-radius:13px;padding:13px 16px;background:transparent;color:var(--muted);font:750 14px Manrope;cursor:pointer;text-align:left}.app-stage-tab span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#edf2ef;color:var(--green);font-size:12px}.app-stage-tab.active{background:var(--green);color:#fff}.app-stage-tab.active span{background:var(--lime);color:var(--ink)}.stage-heading{display:none;margin:4px 0 18px}.stage-heading h2{margin:3px 0;font:800 25px Manrope}.stage-heading p{margin:0;color:var(--muted)}.economic-inputs{margin-top:16px;padding:18px;border:1px solid var(--line);border-radius:14px;background:#f8faf8}.economic-inputs h4{margin:0 0 4px;font:750 16px Manrope}.economic-inputs>p{margin:0;color:var(--muted);font-size:12px}body[data-app-stage="input"] .stage-heading[data-stage-heading="input"],body[data-app-stage="evaluation"] .stage-heading[data-stage-heading="evaluation"],body[data-app-stage="results"] .stage-heading[data-stage-heading="results"]{display:block}body[data-app-stage="input"] .tab-panel>.hero-grid,body[data-app-stage="input"] .tab-panel>.tariff-hero,body[data-app-stage="input"] .tab-panel>.metric-grid,body[data-app-stage="input"] .tab-panel>.forecast-panel,body[data-app-stage="input"] .tab-panel>.log-panel,body[data-app-stage="input"] .tab-panel .action-panel,body[data-app-stage="input"] .workflow-gate,body[data-app-stage="input"] .bt5b-path,body[data-app-stage="input"] .curve-metrics,body[data-app-stage="input"] .curve-layout,body[data-app-stage="input"] .battery-metrics,body[data-app-stage="input"] .battery-action,body[data-app-stage="input"] .solar-metrics,body[data-app-stage="input"] .solar-rule,body[data-app-stage="input"] .battery-result-chart,body[data-app-stage="input"] .advanced-results,body[data-app-stage="input"] #simulateBatteryBtn{display:none!important}body[data-app-stage="input"] .tab-panel .workspace-grid{grid-template-columns:1fr}body[data-app-stage="evaluation"] .tariff-selector,body[data-app-stage="evaluation"] .tab-panel,body[data-app-stage="evaluation"] .assessment-intake,body[data-app-stage="evaluation"] .upload-grid,body[data-app-stage="evaluation"] .battery-result-chart,body[data-app-stage="evaluation"] .advanced-results{display:none!important}body[data-app-stage="results"] .tariff-selector,body[data-app-stage="results"] .tab-panel>.workspace-grid,body[data-app-stage="results"] .tab-panel>.tariff-note,body[data-app-stage="results"] .assessment-intake,body[data-app-stage="results"] .workflow-gate,body[data-app-stage="results"] .bt5b-path,body[data-app-stage="results"] .upload-grid,body[data-app-stage="results"] .curve-controls,body[data-app-stage="results"] .simple-flow-note,body[data-app-stage="results"] .simple-inputs,body[data-app-stage="results"] .solar-grid,body[data-app-stage="results"] .solar-rule,body[data-app-stage="results"] .battery-planner>.panel-title button{display:none!important}body[data-app-stage="results"] .advanced-results{display:block}body[data-app-stage="results"] .advanced-results>summary{display:none}body[data-app-stage="results"] .advanced-results .battery-comparison{border:1px solid var(--line);border-radius:16px}body[data-app-stage="evaluation"] .data-center-title h2:after{content:" · Evaluación"}body[data-app-stage="results"] .data-center-title h2:after{content:" · Resultados"}@media(max-width:700px){.app-stage-nav{grid-template-columns:1fr;position:static}.app-stage-tab{padding:10px 12px}.stage-heading h2{font-size:21px}}</style>
+  <style>.solar-prediction{margin-top:16px;padding:18px;border:1px solid #b8d9cc;border-radius:14px;background:#fff}.solar-prediction-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.solar-prediction h4{margin:0 0 5px;font:750 18px Manrope}.solar-prediction p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.solar-prediction-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}.solar-prediction-inputs label{display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:700;color:#40514c}.solar-prediction-inputs input{border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 12px;color:var(--ink)}.solar-prediction-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.solar-prediction-metrics div{padding:12px;border-radius:11px;background:#eef7f3}.solar-prediction-metrics span,.solar-prediction-metrics small{display:block;color:var(--muted);font-size:10px}.solar-prediction-metrics strong{display:block;margin:4px 0;color:var(--ink);font:750 18px Manrope}.solar-source{margin-top:12px!important}.solar-source a{color:var(--green);font-weight:700}@media(max-width:700px){.solar-prediction-head{flex-direction:column}.solar-prediction-inputs,.solar-prediction-metrics{grid-template-columns:1fr}}</style>
+  <style>.curve-download-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}.curve-download-head h3{margin:0;font:750 16px Manrope}.curve-download-actions{display:flex;gap:8px;flex-wrap:wrap}.curve-download-actions button:disabled{opacity:.45;cursor:not-allowed}@media(max-width:700px){.curve-download-head{align-items:flex-start;flex-direction:column}.curve-download-actions .ghost-btn{display:inline-flex}}</style>
+  <style>.assessment-intake{margin:18px 0 24px;padding:24px;border:1px solid var(--line);border-radius:20px;background:#f7faf8}.assessment-intake-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:18px}.assessment-intake-head h3{margin:3px 0;font:800 24px Manrope}.assessment-intake-head p:not(.eyebrow){margin:5px 0 0;color:var(--muted);font-size:13px}.intake-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.intake-step{padding:18px;border:1px solid #d8e2dd;border-radius:16px;background:#fff}.intake-step-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}.intake-step-number{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border-radius:50%;background:#dff39c;color:#17352d;font-weight:900}.intake-step h4{margin:0 0 3px;font:750 16px Manrope}.intake-step p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.intake-fields{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.intake-fields label{display:flex;flex-direction:column;gap:6px;color:#40514c;font-size:11px;font-weight:750}.intake-fields input,.intake-fields select{width:100%;border:1px solid var(--line);border-radius:10px;background:#fbfcfb;padding:10px 11px;color:var(--ink)}.intake-file{margin-top:12px}.coverage-box{margin-top:12px;padding:12px;border-radius:11px;background:#f2f6f4}.coverage-line{display:flex;justify-content:space-between;gap:12px;font-size:12px}.coverage-track{height:8px;margin-top:8px;border-radius:999px;background:#dbe6e1;overflow:hidden}.coverage-track span{display:block;height:100%;width:0;background:#18a278;transition:width .2s}.assessment-checks{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.assessment-check{padding:10px 12px;border-radius:10px;background:#edf2ef;color:#65736f;font-size:11px;font-weight:750}.assessment-check.ok{background:#dcfce7;color:#166534}.assessment-check.missing{background:#fef3c7;color:#92400e}.assessment-status{margin-top:14px;padding:14px 16px;border-radius:12px;background:#fef3c7;color:#92400e;font-size:13px;font-weight:750}.assessment-status.ready{background:#dcfce7;color:#166534}.optional-upload-title{grid-column:1/-1;margin:4px 0 -4px;color:var(--muted);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}@media(max-width:900px){.intake-grid,.assessment-checks{grid-template-columns:1fr 1fr}}@media(max-width:620px){.assessment-intake{padding:16px}.assessment-intake-head{flex-direction:column}.intake-grid,.assessment-checks,.intake-fields{grid-template-columns:1fr}}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">FC</span>
+      <div><strong>Control Tarifario Eléctrico</strong><small>Monitoreo mensual MT3 · MT4 · BT3 · BT5B</small></div>
+    </div>
+    <button id="resetBtn" class="ghost-btn" type="button">Restaurar Combapata</button>
+  </header>
+
+  <main>
+    <nav class="app-stage-nav" aria-label="Etapas de la aplicación">
+      <button class="app-stage-tab active" type="button" data-app-stage="input" aria-selected="true"><span>1</span>Datos de entrada</button>
+      <button class="app-stage-tab" type="button" data-app-stage="evaluation" aria-selected="false"><span>2</span>Evaluación</button>
+      <button class="app-stage-tab" type="button" data-app-stage="results" aria-selected="false"><span>3</span>Resultados</button>
+    </nav>
+    <div class="stage-heading" data-stage-heading="input"><p class="eyebrow">Paso 1</p><h2>Datos de entrada</h2><p>Complete la tarifa, los recibos, las curvas y las características del sistema antes de evaluar.</p></div>
+    <div class="stage-heading" data-stage-heading="evaluation"><p class="eyebrow">Paso 2</p><h2>Evaluación técnica</h2><p>Valide el factor de calificación y dimensione el peak shaving, las baterías y la recarga fotovoltaica.</p></div>
+    <div class="stage-heading" data-stage-heading="results"><p class="eyebrow">Paso 3</p><h2>Resultados y comparación</h2><p>Revise las curvas, el factor proyectado, la capacidad recomendada y los escenarios económicos.</p></div>
+    <nav class="tariff-tabs" aria-label="Opciones tarifarias">
+      <button class="tariff-tab active" data-tab="mt3Panel" type="button">MT3</button>
+      <button class="tariff-tab" data-tab="mt4Panel" type="button">MT4</button>
+      <button class="tariff-tab" data-tab="bt3Panel" type="button">BT3</button>
+      <button class="tariff-tab" data-tab="bt5bPanel" type="button">BT5B</button>
+    </nav>
+
+    <section id="mt3Panel" class="tab-panel active">
+    <section class="hero-grid">
+      <div class="intro">
+        <p class="eyebrow">Suministro monitoreado</p>
+        <div class="site-line">
+          <div>
+            <h1 id="siteNameDisplay">Combapata</h1>
+            <p id="periodDisplay">Control operativo mensual</p>
+          </div>
+          <span id="statusPill" class="status-pill">Calculando</span>
+        </div>
+        <p class="lead">Anticipa el cierre mensual y recibe acciones concretas para mantener el factor por debajo de la meta.</p>
+      </div>
+
+      <article class="factor-card">
+        <div class="factor-head"><span>Factor proyectado</span><span id="trendText">—</span></div>
+        <div class="factor-value"><span id="projectedFactor">0,00</span><small>/ <span id="targetFactorLabel">0,45</span></small></div>
+        <div class="gauge" aria-label="Indicador del factor de calificación"><div id="gaugeFill"></div><i id="targetMarker"></i></div>
+        <div class="gauge-scale"><span>0,00</span><span>Meta</span><span>0,50</span><span>1,00</span></div>
+      </article>
+    </section>
+
+    <section class="metric-grid" aria-label="Indicadores principales">
+      <article class="metric"><span>Energía HP acumulada</span><strong id="energyNow">0,00 kWh</strong><small id="energyLimitText">Límite proyectado: —</small></article>
+      <article class="metric"><span>Margen disponible</span><strong id="energyMargin">0,00 kWh</strong><small id="marginDays">—</small></article>
+      <article class="metric"><span>Descarga diaria requerida</span><strong id="dailyReduction">0,00 kWh</strong><small>Entre 18:00 y 23:00</small></article>
+      <article class="metric"><span>Ahorro mensual estimado</span><strong id="monthlySavings">S/ 0,00</strong><small id="savingsMode">Con cambio de calificación</small></article>
+    </section>
+
+    <section class="workspace-grid">
+      <article class="panel inputs-panel">
+        <div class="panel-title"><div><p class="eyebrow">Datos de control</p><h2>Lectura del mes</h2></div><button id="saveBtn" class="primary-btn" type="button">Guardar datos</button></div>
+        <form id="controlForm">
+          <div class="field-grid">
+            <label>Estación<input id="siteName" type="text" value="Combapata"></label>
+            <label>Periodo<input id="period" type="month"></label>
+            <label>Energía HP acumulada (kWh)<input id="energyHP" type="number" min="0" step="0.01" value="356.91"></label>
+            <label>Máxima demanda (kW)<input id="maxDemand" type="number" min="0.01" step="0.01" value="3.48"></label>
+            <label>Horas punta transcurridas<input id="hoursElapsed" type="number" min="1" step="1" value="125"></label>
+            <label>Horas punta del mes<input id="hoursMonth" type="number" min="1" step="1" value="125"></label>
+            <label>Días punta restantes<input id="daysRemaining" type="number" min="0" step="1" value="0"></label>
+            <label>Meta del factor<input id="targetFactor" type="number" min="0.01" max="0.49" step="0.01" value="0.45"></label>
+          </div>
+          <details>
+            <summary>Parámetros económicos y energéticos</summary>
+            <div class="field-grid details-grid">
+              <label>Tarifa energía HP (S/kWh)<input id="rateHP" type="number" min="0" step="0.0001" value="0.3373"></label>
+              <label>Tarifa energía HFP (S/kWh)<input id="rateHFP" type="number" min="0" step="0.0001" value="0.2831"></label>
+              <label>Potencia generación (kW)<input id="generationDemand" type="number" min="0" step="0.01" value="3.48"></label>
+              <label>Potencia distribución (kW)<input id="distributionDemand" type="number" min="0" step="0.01" value="4.26"></label>
+              <label>Cargo generación punta<input id="genPeakRate" type="number" min="0" step="0.01" value="61.06"></label>
+              <label>Cargo generación fuera punta<input id="genOffPeakRate" type="number" min="0" step="0.01" value="38.95"></label>
+              <label>Cargo distribución punta<input id="distPeakRate" type="number" min="0" step="0.01" value="26.01"></label>
+              <label>Cargo distribución fuera punta<input id="distOffPeakRate" type="number" min="0" step="0.01" value="25.85"></label>
+              <label>Eficiencia batería<input id="batteryEfficiency" type="number" min="0.5" max="1" step="0.01" value="0.95"></label>
+              <label><span>Fuente de carga</span><select id="chargeSource"><option value="solar">Solar fotovoltaica</option><option value="grid">Red fuera de punta</option></select></label>
+            </div>
+          </details>
+        </form>
+      </article>
+
+      <aside class="panel action-panel">
+        <div class="panel-title"><div><p class="eyebrow">Motor de recomendaciones</p><h2>Acciones del día</h2></div><span id="actionCount" class="counter">0</span></div>
+        <div id="actionsList" class="actions-list" aria-live="polite"></div>
+      </aside>
+    </section>
+
+    <section class="panel forecast-panel">
+      <div class="panel-title"><div><p class="eyebrow">Proyección</p><h2>Trayectoria al cierre</h2></div><span class="formula">FC = EHP ÷ (NHP × MD)</span></div>
+      <div class="forecast-grid">
+        <div class="chart-wrap">
+          <svg id="forecastChart" viewBox="0 0 760 230" role="img" aria-label="Proyección del factor de calificación"></svg>
+        </div>
+        <div class="scenario-table-wrap">
+          <table>
+            <thead><tr><th>Escenario</th><th>Factor</th><th>Energía HP</th><th>Estado</th></tr></thead>
+            <tbody id="scenarioRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel log-panel">
+      <div class="panel-title"><div><p class="eyebrow">Seguimiento</p><h2>Historial guardado</h2></div><button id="clearHistoryBtn" class="text-btn" type="button">Limpiar historial</button></div>
+      <div class="history-wrap"><table><thead><tr><th>Fecha</th><th>Periodo</th><th>Energía HP</th><th>Demanda</th><th>Factor proyectado</th><th>Estado</th></tr></thead><tbody id="historyRows"></tbody></table></div>
+    </section>
+    </section>
+
+    <section id="mt4Panel" class="tab-panel" hidden>
+      <section class="tariff-hero mt4-hero">
+        <div><p class="eyebrow">Media tensión · simple medición de energía y potencia</p><h1>Control MT4</h1><p>Evalúa la calificación del usuario, la energía total, la energía en hora punta y los cargos de potencia.</p></div>
+        <div class="tariff-score"><span>Factor proyectado</span><strong id="mt4Factor">0,00</strong><small>Meta: <b id="mt4TargetLabel">0,45</b></small></div>
+      </section>
+      <section class="metric-grid bt-metrics">
+        <article class="metric"><span>Energía HP proyectada</span><strong id="mt4ProjectedHP">0,00 kWh</strong><small id="mt4EnergyLimit">Límite: —</small></article>
+        <article class="metric"><span>Reducción necesaria</span><strong id="mt4Reduction">0,00 kWh</strong><small>Para alcanzar el factor objetivo</small></article>
+        <article class="metric"><span>Costo proyectado</span><strong id="mt4Cost">S/ 0,00</strong><small id="mt4CostDetail">Antes de otros conceptos</small></article>
+        <article class="metric"><span>Calificación</span><strong id="mt4State">—</strong><small id="mt4Trend">Esperando datos</small></article>
+      </section>
+      <section class="workspace-grid">
+        <article class="panel inputs-panel">
+          <div class="panel-title"><div><p class="eyebrow">Datos MT4</p><h2>Lectura y cargos mensuales</h2></div><button id="mt4Save" class="primary-btn" type="button">Guardar MT4</button></div>
+          <div class="field-grid">
+            <label>Suministro<input id="mt4Site" type="text" value="Manazo - Entel Perú S.A."></label>
+            <label>Periodo<input id="mt4Period" type="month" value="2022-05"></label>
+            <label>Energía total (kWh)<input id="mt4EnergyTotal" type="number" min="0" step="0.01" value="4544.16"></label>
+            <label>Energía HP (kWh)<input id="mt4EnergyHP" type="number" min="0" step="0.01" value="545.04"></label>
+            <label>Máxima demanda (kW)<input id="mt4Demand" type="number" min="0.01" step="0.01" value="13.68"></label>
+            <label>Horas punta transcurridas<input id="mt4HoursElapsed" type="number" min="1" step="1" value="130"></label>
+            <label>Horas punta del mes<input id="mt4HoursMonth" type="number" min="1" step="1" value="130"></label>
+            <label>Días punta restantes<input id="mt4DaysRemaining" type="number" min="0" step="1" value="0"></label>
+            <label>Meta del factor<input id="mt4Target" type="number" min="0.01" max="0.49" step="0.01" value="0.45"></label>
+            <label>Tarifa energía (S/kWh)<input id="mt4EnergyRate" type="number" min="0" step="0.0001" value="0.2898"></label>
+            <label>Demanda distribución facturada (kW)<input id="mt4DistDemand" type="number" min="0" step="0.01" value="13.80"></label>
+            <label>Cargo distribución (S/kW)<input id="mt4DistRate" type="number" min="0" step="0.0001" value="31.40"></label>
+            <label>Demanda generación facturada (kW)<input id="mt4GenDemand" type="number" min="0" step="0.01" value="13.68"></label>
+            <label>Cargo generación (S/kW)<input id="mt4GenRate" type="number" min="0" step="0.0001" value="38.85"></label>
+            <label>Cargos adicionales (S/)<input id="mt4Other" type="number" min="0" step="0.01" value="139.78"></label>
+            <label>IGV<input id="mt4Tax" type="number" min="0" max="1" step="0.01" value="0.18"></label>
+            <label>Otros conceptos después de IGV (S/)<input id="mt4NonTaxed" type="number" step="0.01" value="41.77"></label>
+          </div>
+        </article>
+        <aside class="panel action-panel"><div class="panel-title"><div><p class="eyebrow">Motor MT4</p><h2>Acciones recomendadas</h2></div><span id="mt4ActionCount" class="counter">0</span></div><div id="mt4Actions" class="actions-list" aria-live="polite"></div></aside>
+      </section>
+      <section class="panel forecast-panel tariff-note"><div><p class="eyebrow">Criterio MT4</p><h2>Calificación por uso en horas punta</h2><p>Se usa <b>FC = Energía HP ÷ (horas HP × máxima demanda)</b>. Un factor menor a 0,50 corresponde normalmente a presencia fuera de punta; la meta operativa puede ser más exigente.</p></div><a href="https://www.osinergmin.gob.pe/Tarifas/Electricidad/PliegoTarifario?Id=170000" target="_blank" rel="noopener">Consultar pliego OSINERGMIN ↗</a></section>
+    </section>
+
+    <section id="bt3Panel" class="tab-panel" hidden>
+      <section class="tariff-hero bt3-hero">
+        <div><p class="eyebrow">Baja tensión · doble medición 2E1P</p><h1>Control BT3</h1><p>Proyecta el factor de calificación y recibe acciones para mantener la condición de usuario fuera de punta.</p></div>
+        <div class="tariff-score"><span>Factor proyectado</span><strong id="bt3Factor">0,00</strong><small>Meta: <b id="bt3TargetLabel">0,45</b></small></div>
+      </section>
+      <section class="metric-grid bt-metrics">
+        <article class="metric"><span>Energía HP proyectada</span><strong id="bt3ProjectedEnergy">0,00 kWh</strong><small id="bt3EnergyLimit">Límite: —</small></article>
+        <article class="metric"><span>Reducción necesaria</span><strong id="bt3Reduction">0,00 kWh</strong><small>Antes del cierre mensual</small></article>
+        <article class="metric"><span>Descarga diaria</span><strong id="bt3Daily">0,00 kWh</strong><small>Aplicar solamente en HP</small></article>
+        <article class="metric"><span>Estado</span><strong id="bt3State">—</strong><small id="bt3Trend">Esperando datos</small></article>
+      </section>
+      <section class="workspace-grid">
+        <article class="panel inputs-panel">
+          <div class="panel-title"><div><p class="eyebrow">Datos BT3</p><h2>Lectura y meta mensual</h2></div><button id="bt3Save" class="primary-btn" type="button">Guardar BT3</button></div>
+          <div class="field-grid">
+            <label>Suministro<input id="bt3Site" type="text" value="Nuevo suministro BT3"></label>
+            <label>Periodo<input id="bt3Period" type="month"></label>
+            <label>Energía HP acumulada (kWh)<input id="bt3EnergyHP" type="number" min="0" step="0.01" value="180"></label>
+            <label>Máxima demanda (kW)<input id="bt3Demand" type="number" min="0.01" step="0.01" value="5"></label>
+            <label>Horas punta transcurridas<input id="bt3HoursElapsed" type="number" min="1" step="1" value="75"></label>
+            <label>Horas punta del mes<input id="bt3HoursMonth" type="number" min="1" step="1" value="125"></label>
+            <label>Días punta restantes<input id="bt3DaysRemaining" type="number" min="0" step="1" value="10"></label>
+            <label>Meta del factor<input id="bt3Target" type="number" min="0.01" max="0.49" step="0.01" value="0.45"></label>
+          </div>
+        </article>
+        <aside class="panel action-panel"><div class="panel-title"><div><p class="eyebrow">Motor BT3</p><h2>Acciones recomendadas</h2></div><span id="bt3ActionCount" class="counter">0</span></div><div id="bt3Actions" class="actions-list" aria-live="polite"></div></aside>
+      </section>
+      <section class="panel forecast-panel tariff-note"><div><p class="eyebrow">Criterio aplicado</p><h2>BT3 también utiliza calificación de potencia</h2><p>El control usa <b>FC = EHP ÷ (NHP × MD)</b>. Los importes económicos deben actualizarse con el pliego vigente de la empresa distribuidora.</p></div><a href="https://www.osinergmin.gob.pe/Tarifas/Electricidad/PliegoTarifario?Id=170000" target="_blank" rel="noopener">Consultar pliego OSINERGMIN ↗</a></section>
+    </section>
+
+    <section id="bt5bPanel" class="tab-panel" hidden>
+      <section class="tariff-hero bt5b-hero">
+        <div><p class="eyebrow">Baja tensión · simple medición 1E</p><h1>Control BT5B</h1><p>Supervisa el consumo mensual, proyecta el recibo y evita superar el presupuesto o el umbral configurado.</p></div>
+        <div class="tariff-score"><span>Costo proyectado</span><strong id="bt5Cost">S/ 0,00</strong><small id="bt5CostState">Sin evaluación</small></div>
+      </section>
+      <section class="metric-grid bt-metrics">
+        <article class="metric"><span>Consumo proyectado</span><strong id="bt5Projected">0,00 kWh</strong><small id="bt5ConsumptionState">Meta: —</small></article>
+        <article class="metric"><span>Margen de consumo</span><strong id="bt5Margin">0,00 kWh</strong><small>Respecto de la meta</small></article>
+        <article class="metric"><span>Promedio diario permitido</span><strong id="bt5DailyLimit">0,00 kWh</strong><small>Para los días restantes</small></article>
+        <article class="metric"><span>Ahorro requerido</span><strong id="bt5Reduction">0,00 kWh</strong><small>Para cerrar dentro de la meta</small></article>
+      </section>
+      <section class="workspace-grid">
+        <article class="panel inputs-panel">
+          <div class="panel-title"><div><p class="eyebrow">Datos BT5B</p><h2>Consumo y presupuesto</h2></div><button id="bt5Save" class="primary-btn" type="button">Guardar BT5B</button></div>
+          <div class="field-grid">
+            <label>Suministro<input id="bt5Site" type="text" value="Nuevo suministro BT5B"></label>
+            <label>Periodo<input id="bt5Period" type="month"></label>
+            <label>Tipo de usuario<select id="bt5UserType"><option value="nonResidential">No residencial</option><option value="residential">Residencial</option></select></label>
+            <label>Consumo acumulado (kWh)<input id="bt5Energy" type="number" min="0" step="0.01" value="220"></label>
+            <label>Días transcurridos<input id="bt5DaysElapsed" type="number" min="1" max="31" step="1" value="20"></label>
+            <label>Días del periodo<input id="bt5DaysMonth" type="number" min="1" max="31" step="1" value="30"></label>
+            <label>Meta de consumo (kWh)<input id="bt5Target" type="number" min="1" step="1" value="300"></label>
+            <label>Presupuesto mensual (S/)<input id="bt5Budget" type="number" min="0" step="1" value="300"></label>
+            <label>Cargo fijo (S/mes)<input id="bt5Fixed" type="number" min="0" step="0.01" value="5.10"></label>
+            <label>Energía activa (S/kWh)<input id="bt5Rate" type="number" min="0" step="0.0001" value="0.8824"></label>
+            <label>Otros cargos antes de IGV (S/)<input id="bt5Other" type="number" min="0" step="0.01" value="0"></label>
+            <label>IGV<input id="bt5Tax" type="number" min="0" max="1" step="0.01" value="0.18"></label>
+          </div>
+        </article>
+        <aside class="panel action-panel"><div class="panel-title"><div><p class="eyebrow">Motor BT5B</p><h2>Avisos de consumo</h2></div><span id="bt5ActionCount" class="counter">0</span></div><div id="bt5Actions" class="actions-list" aria-live="polite"></div></aside>
+      </section>
+      <section class="panel forecast-panel tariff-note"><div><p class="eyebrow">Diferencia importante</p><h2>BT5B no usa factor de calificación</h2><p>Esta opción tiene medición simple de energía. El módulo controla kWh y costo proyectado; los valores tarifarios quedan editables para actualizarlos con el pliego vigente.</p></div><a href="https://www.osinergmin.gob.pe/Tarifas/Electricidad/PliegoTarifario?Id=170000" target="_blank" rel="noopener">Consultar pliego OSINERGMIN ↗</a></section>
+    </section>
+
+    <section class="panel data-center">
+      <div class="panel-title data-center-title">
+        <div><p class="eyebrow">Inicio de la evaluación</p><h2>Ficha del sitio y línea base</h2><p>Complete primero la información del suministro, los recibos disponibles, la curva AC y el sistema de baterías existente.</p></div>
+      </div>
+      <section class="assessment-intake" aria-labelledby="assessmentTitle">
+        <div class="assessment-intake-head"><div><p class="eyebrow">Inputs obligatorios</p><h3 id="assessmentTitle">Datos mínimos para iniciar</h3><p>La evaluación se habilita cuando los cuatro bloques estén completos.</p></div><span id="assessmentBadge" class="status-pill warn">Información incompleta</span></div>
+        <div class="intake-grid">
+          <article class="intake-step">
+            <div class="intake-step-head"><span class="intake-step-number">1</span><div><h4>Sitio, ubicación y tarifa</h4><p>Identifique el suministro y sus coordenadas para el recurso solar.</p></div></div>
+            <div class="intake-fields">
+              <label>Nombre del sitio<input id="evaluationSiteName" type="text" placeholder="Ej. Combapata"></label>
+              <label>Tarifa<select id="dataTariff"><option value="MT3">MT3</option><option value="MT4">MT4</option><option value="BT3">BT3</option><option value="BT5B">BT5B</option></select></label>
+              <label>Latitud<input id="siteLatitude" type="number" min="-90" max="90" step="0.000001" placeholder="-14.000000"></label>
+              <label>Longitud<input id="siteLongitude" type="number" min="-180" max="180" step="0.000001" placeholder="-71.000000"></label>
+            </div>
+          </article>
+          <article class="intake-step">
+            <div class="intake-step-head"><span class="intake-step-number">2</span><div><h4>Historial de recibos</h4><p>Indique cuántos recibos tiene disponibles y cargue esa misma cantidad.</p></div></div>
+            <div class="intake-fields"><label>Recibos disponibles<input id="availableReceiptCount" type="number" min="1" step="1" value="6" inputmode="numeric"></label></div>
+            <div class="intake-file"><label class="file-button">Seleccionar recibos<input id="receiptFiles" type="file" accept="application/pdf,image/jpeg,image/png" multiple></label></div>
+            <div class="coverage-box"><div class="coverage-line"><span id="receiptCoverageStatus">0 de 6 recibos cargados</span><b id="receiptCoveragePercent">0%</b></div><div class="coverage-track"><span id="receiptCoverageBar"></span></div><small id="receiptUniquePeriods">0 periodos únicos identificados</small></div>
+            <div class="attachment-list" id="receiptList"></div>
+          </article>
+          <article class="intake-step">
+            <div class="intake-step-head"><span class="intake-step-number">3</span><div><h4>Curva característica del suministro</h4><p>Cargue la curva AC base; puede ser semanal, quincenal o mensual.</p></div></div>
+            <div class="intake-file"><label class="file-button">Seleccionar curva AC<input id="curveBeforeFile" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"></label><small id="curveBeforeStatus" class="file-status">Sin archivo</small></div>
+          </article>
+          <article class="intake-step">
+            <div class="intake-step-head"><span class="intake-step-number">4</span><div><h4>Baterías y carga actual</h4><p>Registre el respaldo existente antes de calcular la ampliación necesaria.</p></div></div>
+            <div class="intake-fields">
+              <label>Tipo de batería<select id="batteryType"><option value="litio-lfp">Litio / LFP</option><option value="litio-nmc">Litio / NMC</option><option value="plomo-acido">Plomo-ácido</option><option value="otro">Otro</option></select></label>
+              <label>Modelo<input id="batteryModel" type="text" value="ESM-48150B1"></label>
+              <label>Cantidad existente<input id="batteryInstalled" type="number" min="0" step="1" value="1"></label>
+              <label>Capacidad por batería (kWh)<input id="batteryCapacity" type="number" min="0.1" step="0.1" value="4.8"></label>
+              <label>Tiempo de respaldo actual (h)<input id="batteryBackupHours" type="number" min="0" step="0.1" placeholder="Ej. 4"></label>
+              <label>Carga actual del sitio (kW)<input id="siteCurrentLoad" type="number" min="0" step="0.01" placeholder="Ej. 2.5"></label>
+            </div>
+          </article>
+        </div>
+        <section class="economic-inputs"><h4>Tarifas para la comparación económica</h4><p>Estos valores alimentan el cálculo de costos de los escenarios.</p><div id="economicInputsHost"></div></section>
+        <div class="assessment-checks"><div id="assessmentCheckSite" class="assessment-check missing">○ Sitio y coordenadas</div><div id="assessmentCheckReceipts" class="assessment-check missing">○ Recibos declarados y cargados</div><div id="assessmentCheckCurve" class="assessment-check missing">○ Curva AC base</div><div id="assessmentCheckBattery" class="assessment-check missing">○ Baterías y carga</div></div>
+        <div id="assessmentStatus" class="assessment-status">Complete los datos para habilitar el dimensionamiento.</div>
+      </section>
+      <section class="selection-criteria" aria-labelledby="selectionCriteriaTitle">
+        <div class="panel-title"><div><p class="eyebrow">Selección del sitio</p><h2 id="selectionCriteriaTitle">Criterios para instalar paneles y ciclar baterías</h2><p>Compare la potencia de diseño y el espacio disponible con la carga actual del sitio.</p></div><span id="selectionCriteriaBadge" class="status-pill warn">Pendiente</span></div>
+        <div class="selection-criteria-fields">
+          <label>Potencia FV de diseño (kWp)<input id="selectionPvKw" type="number" min="0" step="0.01" placeholder="Ej. 6"></label>
+          <label>Espacio habilitado (m²)<input id="selectionAreaM2" type="number" min="0" step="0.1" placeholder="Ej. 40"></label>
+          <label>Potencia FV para recarga de baterías (kW)<input id="selectionRechargeKw" type="number" min="0" step="0.01" placeholder="Ej. 1.5"></label>
+          <label>Área por panel de 630 Wp (m²)<input id="selectionPanelAreaM2" type="number" min="0.1" step="0.1" value="3"></label>
+        </div>
+        <div class="selection-criteria-list">
+          <div id="selectionCriterion1" class="assessment-check missing">○ 1. Potencia FV de diseño mayor o igual que la carga del sitio.</div>
+          <div id="selectionCriterion2" class="assessment-check missing">○ 2. Espacio habilitado para instalar paneles.</div>
+          <div id="selectionCriterion3" class="assessment-check missing">○ 3. Espacio para paneles que cubran la carga del sitio y la recarga de baterías.</div>
+        </div>
+        <p id="selectionCriteriaSummary" class="assessment-status">Complete los datos para validar los criterios de selección.</p>
+      </section>
+      <section class="workflow-gate" aria-live="polite">
+        <div class="workflow-head"><div><p class="eyebrow" style="color:#dff39c">Ruta automática de evaluación</p><h3 id="workflowDecision">Validando tarifa…</h3><p id="workflowExplanation">Seleccione o cargue un recibo para definir la ruta de análisis.</p></div><span id="workflowBadge" class="status-pill">Pendiente</span></div>
+        <div class="workflow-steps">
+          <article class="workflow-step" id="workflowStep1"><span class="workflow-number">1</span><b>Validar tarifa</b><small>BT3, MT3 y MT4 evalúan factor. BT5B evalúa consumo y costo.</small></article>
+          <article class="workflow-step" id="workflowStep2"><span class="workflow-number">2</span><b>Definir peak shaving</b><small>Calcular energía, potencia y horas diarias necesarias para alcanzar el factor objetivo.</small></article>
+          <article class="workflow-step" id="workflowStep3"><span class="workflow-number">3</span><b>Seleccionar batería</b><small>Dimensionar capacidad útil y cantidad mínima para repetir el ciclo cada día.</small></article>
+          <article class="workflow-step" id="workflowStep4"><span class="workflow-number">4</span><b>Cerrar el ciclo con FV</b><small>Recargar sin superar el límite de potencia admitido desde la red.</small></article>
+        </div>
+      </section>
+      <section id="bt5bEnergyPath" class="bt5b-path is-hidden"><h3>BT5B: evaluación por consumo, costo y generación solar</h3><p>Esta tarifa no utiliza factor de calificación. La aplicación genera una curva fotovoltaica horaria para el mismo periodo de la curva AC, incluso si cubre un año.</p>
+        <section class="solar-prediction" aria-labelledby="bt5bSolarTitle">
+          <div class="solar-prediction-head"><div><h4 id="bt5bSolarTitle">Predicción solar por ubicación</h4><p>Estimación climatológica con radiación horizontal de PVGIS. No sustituye un pronóstico meteorológico operativo.</p></div><button id="bt5bSolarRefresh" class="primary-btn" type="button">Actualizar radiación</button></div>
+          <div class="solar-prediction-inputs">
+            <label>Potencia fotovoltaica a evaluar (kWp)<input id="bt5bSolarCapacity" type="number" min="0.01" step="0.01" value="1"></label>
+            <label>Pérdidas totales del sistema (%)<input id="bt5bSolarLoss" type="number" min="0" max="80" step="0.1" value="14"></label>
+          </div>
+          <div class="solar-prediction-metrics">
+            <div><span>Radiación promedio diaria</span><strong id="bt5bSolarDailyRadiation">—</strong><small>kWh/m²/día</small></div>
+            <div><span id="bt5bSolarRadiationLabel">Radiación del periodo</span><strong id="bt5bSolarMonthlyRadiation">—</strong><small id="bt5bSolarRadiationUnit">kWh/m²/periodo</small></div>
+            <div><span>Generación FV estimada</span><strong id="bt5bSolarMonthlyEnergy">—</strong><small id="bt5bSolarEnergyUnit">kWh/periodo</small></div>
+          </div>
+          <div id="bt5bSolarStatus" class="battery-action">Complete los datos de entrada para consultar la radiación solar.</div>
+          <p class="solar-source">Fuente: <a href="https://re.jrc.ec.europa.eu/pvg_tools/es/" target="_blank" rel="noopener">PVGIS · Comisión Europea</a>. Perfil horario construido con un año meteorológico típico.</p>
+        </section>
+      </section>
+      <div class="upload-grid">
+        <p class="optional-upload-title">Curvas opcionales para comparar escenarios</p>
+        <article class="upload-card"><div class="upload-icon curve-after-icon">AC 2</div><div><h3>Curva AC después</h3><p>Consumo resultante usado para recalcular demanda, energía en hora punta y factor de calificación.</p><label class="file-button">Seleccionar curva después<input id="curveAfterFile" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"></label><small id="curveAfterStatus" class="file-status">Sin archivo</small></div></article>
+        <article class="upload-card"><div class="upload-icon pv-icon">FV</div><div><h3>Generación fotovoltaica</h3><p>Curva de generación solar en kWh para compararla con el suministro AC del mismo periodo.</p><label class="file-button">Seleccionar curva fotovoltaica<input id="pvCurveFile" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"></label><small id="pvCurveStatus" class="file-status">Sin archivo</small></div></article>
+      </div>
+      <div id="uploadMessage" class="upload-message" aria-live="polite"></div>
+      <div class="curve-controls">
+        <label>Periodo de la muestra<select id="curvePeriodicity"><option value="weekly">Semanal (× 4,33)</option><option value="biweekly">Quincenal (× 2)</option><option value="monthly" selected>Mensual (× 1)</option><option value="annual">Anual (sin multiplicar)</option></select></label>
+        <label>Intervalo de respaldo (min)<input id="curveInterval" type="number" min="1" step="1" value="15"></label>
+        <label class="factor-only">Inicio hora punta<input id="peakStart" type="number" min="0" max="23" step="1" value="18"></label>
+        <label class="factor-only">Fin hora punta<input id="peakEnd" type="number" min="1" max="24" step="1" value="23"></label>
+        <label class="factor-only">Factor objetivo<input id="curveTarget" type="number" min="0.01" max="1" step="0.01" value="0.45"></label>
+        <button id="applyCurveBtn" class="primary-btn" type="button" disabled>Aplicar lectura a la tarifa</button>
+      </div>
+      <section class="metric-grid curve-metrics">
+        <article class="metric"><span id="curveBeforeTotalLabel">Energía AC antes mensualizada</span><strong id="curveBeforeTotal">—</strong><small id="curveBeforePoints">Sin curva cargada</small></article>
+        <article class="metric"><span id="curveTotalLabel">Energía AC después mensualizada</span><strong id="curveTotal">—</strong><small id="curvePoints">Sin curva cargada</small></article>
+        <article class="metric"><span>Reducción AC</span><strong id="curveReduction">—</strong><small id="curveReductionStatus">Requiere ambas curvas AC</small></article>
+        <article class="metric"><span id="pvCurveTotalLabel">Generación fotovoltaica mensualizada</span><strong id="pvCurveTotal">—</strong><small id="pvCurvePoints">Sin curva cargada</small></article>
+        <article class="metric"><span>Suministro AC proyectado</span><strong id="projectedACTotal">—</strong><small id="projectedACStatus">Requiere curva AC y generación FV</small></article>
+        <article class="metric"><span>Consumo neto proyectado</span><strong id="projectedNetTotal">—</strong><small id="projectedNetStatus">AC proyectada − generación FV</small></article>
+        <article class="metric factor-only"><span>Energía mensualizada en HP</span><strong id="curvePeakEnergy">—</strong><small id="curvePeakHours">Horario 18:00–23:00</small></article>
+        <article class="metric factor-only"><span>Máxima demanda después</span><strong id="curveDemand">—</strong><small>Calculada por intervalo</small></article>
+        <article class="metric factor-only"><span>Factor calculado</span><strong id="curveFactor">—</strong><small id="curveFactorStatus">Esperando datos</small></article>
+      </section>
+      <div class="curve-layout">
+        <div><div class="curve-download-head"><h3 id="solarContrastTitle">Curva AC proyectada y generación solar</h3><div class="curve-download-actions"><button id="downloadProjectionXlsx" class="primary-btn" type="button" disabled>Descargar Excel</button><button id="downloadProjectionCsv" class="ghost-btn" type="button" disabled>Descargar CSV</button></div></div><div class="chart-wrap curve-chart-wrap"><svg id="acCurveChart" viewBox="0 0 1000 330" role="img" aria-label="Suministro AC proyectado y generación fotovoltaica"></svg></div><h3 id="finalACChartTitle" class="curve-second-title">Curva AC final · consumo neto de red</h3><div class="chart-wrap curve-chart-wrap"><svg id="finalACChart" viewBox="0 0 1000 330" role="img" aria-label="Curva AC final de consumo neto de red"></svg></div><p id="solarContrastNote" class="battery-chart-note">Cargue la curva AC y genere o cargue la curva fotovoltaica para proyectarlas sobre el mismo periodo.</p></div>
+        <aside id="curveValidation" class="curve-validation"><span class="status-pill">Sin datos</span><h3>Validación pendiente</h3><p>Cargue un archivo CSV para evaluar el factor objetivo.</p></aside>
+      </div>
+      <section class="battery-planner factor-only" id="factorBatteryPlanner">
+        <div class="panel-title"><div><p class="eyebrow">Peak shaving simplificado</p><h2>Descarga, batería y recarga fotovoltaica</h2><p>Un solo cálculo desde la curva del suministro hasta el factor objetivo, verificando energía y potencia en cada ciclo diario.</p></div><button id="simulateBatteryBtn" class="primary-btn" type="button" disabled>Generar curva simulada</button></div>
+        <p class="simple-flow-note"><b>Objetivo:</b> retirar únicamente la energía necesaria en horas punta, limitar el tiempo de descarga y recargar la batería con la mínima potencia fotovoltaica posible, sin añadir una nueva demanda máxima desde la red.</p>
+        <div class="battery-grid simple-inputs">
+          <label>Profundidad de descarga utilizable<input id="batteryDoD" type="number" min="0.1" max="1" step="0.01" value="0.90"></label>
+          <label>Eficiencia de descarga<input id="batteryDischargeEfficiency" type="number" min="0.5" max="1" step="0.01" value="0.95"></label>
+          <label>Potencia disponible para peak shaving (kW)<input id="batteryPeakPower" type="number" min="0.01" step="0.01" value="1"></label>
+          <label>Máximo de horas de descarga al día<input id="peakShavingMaxHours" type="number" min="0.1" max="24" step="0.1" value="5"></label>
+        </div>
+        <section class="metric-grid battery-metrics">
+          <article class="metric"><span>Capacidad útil por batería</span><strong id="batteryUsable">—</strong><small>Capacidad × profundidad × eficiencia</small></article>
+          <article class="metric result-highlight"><span>Energía a retirar en HP</span><strong id="batteryMonthlyRequired">—</strong><small>Reducción mensual para alcanzar la meta</small></article>
+          <article class="metric result-highlight"><span>Peak shaving diario</span><strong id="batteryDailyRequired">—</strong><small id="batteryPeakDays">Según días punta de la muestra</small></article>
+          <article class="metric result-highlight"><span>Horas diarias necesarias</span><strong id="batteryDailyHours">—</strong><small id="batterySchedule">Dentro del horario punta</small></article>
+          <article class="metric"><span>Potencia mínima requerida</span><strong id="batteryRequiredPower">—</strong><small id="batteryPowerStatus">Para cumplir dentro del tiempo máximo</small></article>
+          <article class="metric"><span>Capacidad nominal mínima</span><strong id="batteryOptimalCapacity">—</strong><small>Capacidad mínima para la descarga diaria</small></article>
+          <article class="metric result-highlight"><span>Baterías recomendadas</span><strong id="batteryRecommended">—</strong><small>Redondeado al entero superior</small></article>
+          <article class="metric"><span>Descarga disponible por día</span><strong id="batteryDailyAvailable">—</strong><small id="batteryInstalledLabel">Con baterías instaladas</small></article>
+          <article class="metric"><span>Potencia configurada de descarga</span><strong id="batteryAveragePower">—</strong><small>Valor operativo usado en la simulación</small></article>
+          <article class="metric result-highlight"><span>Factor proyectado</span><strong id="batterySimulatedFactor">—</strong><small id="batterySimulationStatus">Esperando curva AC</small></article>
+        </section>
+        <div id="batteryAction" class="battery-action">Cargue la curva AC antes o después para dimensionar las baterías.</div>
+        <section class="solar-sizing">
+          <p class="eyebrow">Recarga sin consumo adicional de red</p><h3>Paneles fotovoltaicos recomendados</h3>
+          <div class="battery-grid solar-grid">
+            <label>Potencia por panel (Wp)<input id="solarPanelWp" type="number" min="1" step="1" value="630"></label>
+            <label>Horas sol pico diarias<input id="solarPeakSunHours" type="number" min="0.1" step="0.1" value="5.5"></label>
+            <label>Eficiencia del sistema FV<input id="solarSystemEfficiency" type="number" min="0.1" max="1" step="0.01" value="0.80"></label>
+            <label>Eficiencia de recarga<input id="batteryChargeEfficiency" type="number" min="0.1" max="1" step="0.01" value="0.90"></label>
+            <label>Horas disponibles para recarga<input id="solarRechargeHours" type="number" min="0.1" max="24" step="0.1" value="5"></label>
+            <label>Máxima potencia permitida desde red (kW)<input id="gridRechargePowerLimit" type="number" min="0" step="0.01" value="0"></label>
+          </div>
+          <section class="metric-grid solar-metrics">
+            <article class="metric"><span>Energía diaria para recarga</span><strong id="solarRechargeEnergy">—</strong><small>Incluye pérdidas de recarga</small></article>
+            <article class="metric"><span>Potencia promedio de recarga</span><strong id="solarRechargePower">—</strong><small>Energía ÷ horas disponibles</small></article>
+            <article class="metric"><span>FV mínimo por energía</span><strong id="solarMinKwpEnergy">—</strong><small>Balance energético diario</small></article>
+            <article class="metric"><span>FV mínimo por potencia</span><strong id="solarMinKwpPower">—</strong><small>Respeta el límite desde la red</small></article>
+            <article class="metric"><span>Producción diaria por panel</span><strong id="solarPanelDailyYield">—</strong><small>Wp × horas sol × eficiencia FV</small></article>
+            <article class="metric result-highlight"><span>Paneles mínimos</span><strong id="solarPanelsRecommended">—</strong><small>Mayor criterio: energía o potencia</small></article>
+            <article class="metric result-highlight"><span>Potencia FV instalada</span><strong id="solarInstalledPower">—</strong><small>Con paneles recomendados</small></article>
+            <article class="metric"><span>Potencia prevista desde red</span><strong id="solarGridPower">—</strong><small>Durante la recarga coordinada</small></article>
+          </section>
+          <p class="solar-rule">El número de paneles se calcula dos veces: por la energía diaria que debe reponerse y por la potencia instantánea necesaria para no superar el límite de recarga desde la red. Se recomienda el resultado más exigente.</p>
+          <div id="solarAction" class="battery-action">Esperando el cálculo de energía que debe retirarse de horas punta.</div>
+        </section>
+        <section class="battery-result-chart">
+          <div class="battery-chart-head"><div><p class="eyebrow">Resultado de la simulación</p><h3>Curva AC después del uso de baterías</h3></div><div class="battery-chart-summary"><span>Antes <b id="batteryChartBefore">—</b></span><span>Después <b id="batteryChartAfter">—</b></span><span>Reducción <b id="batteryChartReduction">—</b></span></div></div>
+          <div class="chart-wrap"><svg id="batteryCurveChart" viewBox="0 0 1000 330" role="img" aria-label="Curva AC antes y después de la descarga de baterías de litio"></svg></div>
+          <p id="batteryChartNote" class="battery-chart-note">Ejecute la simulación para generar la curva posterior al uso de baterías.</p>
+        </section>
+        <details class="advanced-results"><summary>Ver comparación económica y cobros por escenario</summary><section class="battery-comparison">
+          <p class="eyebrow">Comparación de escenarios</p>
+          <h3>Impacto sobre el factor de calificación</h3>
+          <div class="field-grid mt4-rate-grid">
+            <label>Cargo fijo MT4 (S/mes)<input id="scenarioFixedRate" type="number" min="0" step="0.01" value="13.99"></label>
+            <label>Energía activa (S/kWh)<input id="scenarioEnergyRate" type="number" min="0" step="0.0001" value="0.3101"></label>
+            <label>Generación presente en punta (S/kW)<input id="scenarioGenPeakRate" type="number" min="0" step="0.01" value="62.26"></label>
+            <label>Generación fuera de punta (S/kW)<input id="scenarioGenOffPeakRate" type="number" min="0" step="0.01" value="39.80"></label>
+            <label>Distribución presente en punta (S/kW)<input id="scenarioDistPeakRate" type="number" min="0" step="0.01" value="26.19"></label>
+            <label>Distribución fuera de punta (S/kW)<input id="scenarioDistOffPeakRate" type="number" min="0" step="0.01" value="26.05"></label>
+          </div>
+          <div class="scenario-table-wrap"><table><thead><tr><th>Escenario</th><th>Fuente</th><th>Consumo total</th><th>Reducción vs. antes</th><th>Costo total MT4</th><th>Ahorro vs. antes</th><th>Energía HP</th><th>Demanda máxima</th><th>Factor</th><th>Variación FC</th><th>Resultado</th></tr></thead><tbody id="batteryComparisonRows"><tr><td colspan="11" class="empty">Cargue las curvas para comparar los escenarios.</td></tr></tbody></table></div>
+          <p id="batteryComparisonNote" class="comparison-note">La comparación usa la curva AC antes, la curva del suministro con paneles y la simulación separada con baterías.</p>
+          <div class="charge-breakdown"><h4>Desglose de cobros MT4</h4><div class="scenario-table-wrap"><table><thead><tr><th>Concepto mensual</th><th>Antes de paneles</th><th>Luego de paneles</th><th>Paneles + baterías</th></tr></thead><tbody id="mt4ChargeRows"><tr><td colspan="4" class="empty">Cargue las curvas para calcular los cobros.</td></tr></tbody></table></div></div>
+        </section></details>
+      </section>
+      <details class="csv-help"><summary>Formatos reconocidos y mensualización</summary><pre>Formato simple: fecha_hora;kWh&#10;Excel de energía: Start Time | Energy Consumption per Hour (kWh)&#10;Excel de potencia: Hora | Potencia activa (kW), incluso con una hoja por día&#10;La potencia en kW se convierte automáticamente a kWh según el intervalo detectado.&#10;Semanal: energía y horas punta × 4,33. Quincenal: × 2. Mensual: × 1.&#10;La máxima demanda no se multiplica.&#10;Use el mismo intervalo y periodo para comparar las tres curvas.&#10;Las filas Time range, Export time, títulos y notas se omiten automáticamente.</pre></details>
+    </section>
+  </main>
+
+  <footer><span>Herramienta de apoyo operativo</span><span>Validar los resultados con el medidor y el recibo de la distribuidora.</span></footer>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
