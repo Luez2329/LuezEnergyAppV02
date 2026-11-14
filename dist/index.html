@@ -272,7 +272,7 @@
         <div class="assessment-checks"><div id="assessmentCheckSite" class="assessment-check missing">○ Sitio y coordenadas</div><div id="assessmentCheckReceipts" class="assessment-check missing">○ Recibos declarados y cargados</div><div id="assessmentCheckCurve" class="assessment-check missing">○ Curva AC base</div><div id="assessmentCheckBattery" class="assessment-check missing is-hidden">○ Baterías y carga</div></div>
         <div id="assessmentStatus" class="assessment-status">Complete los datos para habilitar el dimensionamiento.</div>
       </section>
-      <section class="selection-criteria" aria-labelledby="selectionCriteriaTitle">
+      <section class="selection-criteria is-hidden" aria-labelledby="selectionCriteriaTitle">
         <div class="panel-title"><div><p class="eyebrow">Selección del sitio</p><h2 id="selectionCriteriaTitle">Criterios para instalar paneles y ciclar baterías</h2><p>Compare la potencia de diseño y el espacio disponible con la carga actual del sitio.</p></div><span id="selectionCriteriaBadge" class="status-pill warn">Pendiente</span></div>
         <div class="selection-criteria-fields">
           <label>Potencia FV de diseño (kWp)<input id="selectionPvKw" type="number" min="0" step="0.01" placeholder="Ej. 6"></label>
@@ -286,6 +286,33 @@
           <div id="selectionCriterion3" class="assessment-check missing">○ 3. Espacio para paneles que cubran la carga del sitio y la recarga de baterías.</div>
         </div>
         <p id="selectionCriteriaSummary" class="assessment-status">Complete los datos para validar los criterios de selección.</p>
+      </section>
+      <section class="scenario-inputs" aria-labelledby="scenarioInputsTitle">
+        <div class="panel-title"><div><p class="eyebrow">Diseño de alternativas BT5B</p><h2 id="scenarioInputsTitle">Paneles, respaldo y costos</h2><p>La potencia pico se toma de la curva AC. El área determina cuántos paneles de 630 Wp caben; la curva solar permite evaluar el excedente para baterías.</p></div></div>
+        <div class="scenario-input-grid">
+          <label>Área útil para paneles (m²)<input id="optAreaM2" type="number" min="0" step="0.1" placeholder="Ej. 40"></label>
+          <label>Área ocupada por panel (m²)<input id="optPanelAreaM2" type="number" min="0.1" step="0.1" value="3"></label>
+          <label>Potencia de cada panel (Wp)<input id="optPanelWp" type="number" min="1" step="1" value="630"></label>
+          <label>Factor de diseño de potencia FV<input id="optDesignFactor" type="number" min="0.1" max="1" step="0.01" value="0.80"></label>
+          <label>Límite del convertidor/inyección DC (kW)<input id="optDcLimitKw" type="number" min="0" step="0.1" placeholder="Vacío: pendiente de validar"></label>
+          <label>Reserva de respaldo del sitio (h)<input id="optReserveHours" type="number" value="6" readonly></label>
+          <label>Fracción útil de la batería<input id="optBatteryDod" type="number" min="0.1" max="1" step="0.01" value="0.90"></label>
+          <label>Eficiencia de carga<input id="optChargeEff" type="number" min="0.1" max="1" step="0.01" value="0.95"></label>
+          <label>Eficiencia de descarga<input id="optDischargeEff" type="number" min="0.1" max="1" step="0.01" value="0.95"></label>
+          <label>Potencia máxima de carga (kW)<input id="optChargeKw" type="number" min="0.1" step="0.1" value="2"></label>
+          <label>Potencia máxima de descarga (kW)<input id="optDischargeKw" type="number" min="0.1" step="0.1" value="2"></label>
+        </div>
+        <h3>Costos de implementación</h3>
+        <div class="scenario-input-grid">
+          <label>Costo instalado por panel (S/)<input id="optPanelCost" type="number" min="0" step="1" placeholder="Incluya montaje y cableado por panel"></label>
+          <label>Costo por batería adicional (S/)<input id="optBatteryCost" type="number" min="0" step="1" placeholder="Ej. ESM-48150B1"></label>
+          <label>Convertidor y control DC (S/)<input id="optConverterCost" type="number" min="0" step="1" placeholder="Costo por sistema"></label>
+          <label>Otros costos iniciales (S/)<input id="optOtherCapex" type="number" min="0" step="1" value="0"></label>
+          <label>Operación y mantenimiento anual (S/)<input id="optAnnualOpex" type="number" min="0" step="1" value="0"></label>
+          <label>Desgaste de batería (S/kWh descargado)<input id="optWearRate" type="number" min="0" step="0.001" value="0"></label>
+        </div>
+        <p class="scenario-help">La evaluación económica usa el precio de energía y el IGV del formulario BT5B. Revise esos valores con el recibo del sitio. Si el desgaste se deja en cero, el retorno de las opciones con batería es preliminar.</p>
+        <button id="runScenarioEvaluation" class="primary-btn" type="button">Evaluar escenarios A, B, C1 y C2</button>
       </section>
       <section class="workflow-gate is-hidden" aria-live="polite">
         <div class="workflow-head"><div><p class="eyebrow" style="color:#dff39c">Ruta automática de evaluación</p><h3 id="workflowDecision">Validando tarifa…</h3><p id="workflowExplanation">Seleccione o cargue un recibo para definir la ruta de análisis.</p></div><span id="workflowBadge" class="status-pill">Pendiente</span></div>
@@ -341,6 +368,13 @@
         <div><div class="curve-download-head"><h3 id="solarContrastTitle">Curva AC proyectada y generación solar</h3><div class="curve-download-actions"><button id="downloadProjectionXlsx" class="primary-btn" type="button" disabled>Descargar Excel</button><button id="downloadProjectionCsv" class="ghost-btn" type="button" disabled>Descargar CSV</button></div></div><div class="chart-wrap curve-chart-wrap"><svg id="acCurveChart" viewBox="0 0 1000 330" role="img" aria-label="Suministro AC proyectado y generación fotovoltaica"></svg></div><h3 id="finalACChartTitle" class="curve-second-title">Curva AC final · consumo neto de red</h3><div class="chart-wrap curve-chart-wrap"><svg id="finalACChart" viewBox="0 0 1000 330" role="img" aria-label="Curva AC final de consumo neto de red"></svg></div><p id="solarContrastNote" class="battery-chart-note">Cargue la curva AC y genere o cargue la curva fotovoltaica para proyectarlas sobre el mismo periodo.</p></div>
         <aside id="curveValidation" class="curve-validation"><span class="status-pill">Sin datos</span><h3>Validación pendiente</h3><p>Cargue un archivo CSV para evaluar el factor objetivo.</p></aside>
       </div>
+      <section class="scenario-results" aria-labelledby="scenarioResultsTitle">
+        <div class="panel-title"><div><p class="eyebrow">Decisión por sitio</p><h2 id="scenarioResultsTitle">Comparación técnica y económica</h2><p id="scenarioResultsStatus">Complete el área útil, la curva AC anual y la generación solar para evaluar los escenarios.</p></div><span id="scenarioDecisionBadge" class="status-pill warn">Pendiente</span></div>
+        <div id="scenarioKeyMetrics" class="scenario-key-metrics"></div>
+        <div class="scenario-table-wrap"><table><thead><tr><th>Opción</th><th>Estado</th><th>Paneles / potencia</th><th>Baterías nuevas</th><th>Red anual</th><th>Ahorro neto anual</th><th>Inversión</th><th>Retorno</th><th>Respaldo mínimo</th></tr></thead><tbody id="scenarioComparisonRows"><tr><td colspan="9">Esperando datos.</td></tr></tbody></table></div>
+        <div id="scenarioWarnings" class="scenario-warnings"></div>
+        <p class="scenario-help">Supuestos: la curva AC aproxima la carga que se desplaza en la barra DC; no se remunera la exportación; las baterías se cargan solo con excedente FV. El retorno es simple, sin financiación, degradación anual ni reemplazos futuros.</p>
+      </section>
       <section class="battery-planner factor-only" id="factorBatteryPlanner">
         <div class="panel-title"><div><p class="eyebrow">Peak shaving simplificado</p><h2>Descarga, batería y recarga fotovoltaica</h2><p>Un solo cálculo desde la curva del suministro hasta el factor objetivo, verificando energía y potencia en cada ciclo diario.</p></div><button id="simulateBatteryBtn" class="primary-btn" type="button" disabled>Generar curva simulada</button></div>
         <p class="simple-flow-note"><b>Objetivo:</b> retirar únicamente la energía necesaria en horas punta, limitar el tiempo de descarga y recargar la batería con la mínima potencia fotovoltaica posible, sin añadir una nueva demanda máxima desde la red.</p>
@@ -414,5 +448,6 @@
   <footer><span>Herramienta de apoyo operativo</span><span>Validar los resultados con el medidor y el recibo de la distribuidora.</span></footer>
   <script src="vendor/xlsx.full.min.js"></script>
   <script src="app.js"></script>
+  <script src="scenarios-v02.js"></script>
 </body>
 </html>
