@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Monitoreo y control mensual de tarifas eléctricas MT3, MT4, BT3 y BT5B">
-  <title>Control Tarifario Eléctrico</title>
+  <meta name="description" content="Evaluación de consumo eléctrico BT5B y generación fotovoltaica">
+  <title>LuezEnergyAppV02 · BT5B</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -19,10 +19,10 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <span class="brand-mark" aria-hidden="true">FC</span>
-      <div><strong>Control Tarifario Eléctrico</strong><small>Monitoreo mensual MT3 · MT4 · BT3 · BT5B</small></div>
+      <span class="brand-mark" aria-hidden="true">FV</span>
+      <div><strong>LuezEnergyAppV02</strong><small>Evaluación eléctrica y solar BT5B</small></div>
     </div>
-    <button id="resetBtn" class="ghost-btn" type="button">Restaurar Combapata</button>
+    <button id="resetBtn" class="ghost-btn is-hidden" type="button">Restaurar Combapata</button>
   </header>
 
   <main>
@@ -31,17 +31,14 @@
       <button class="app-stage-tab" type="button" data-app-stage="evaluation" aria-selected="false"><span>2</span>Evaluación</button>
       <button class="app-stage-tab" type="button" data-app-stage="results" aria-selected="false"><span>3</span>Resultados</button>
     </nav>
-    <div class="stage-heading" data-stage-heading="input"><p class="eyebrow">Paso 1</p><h2>Datos de entrada</h2><p>Complete la tarifa, los recibos, las curvas y las características del sistema antes de evaluar.</p></div>
-    <div class="stage-heading" data-stage-heading="evaluation"><p class="eyebrow">Paso 2</p><h2>Evaluación técnica</h2><p>Valide el factor de calificación y dimensione el peak shaving, las baterías y la recarga fotovoltaica.</p></div>
-    <div class="stage-heading" data-stage-heading="results"><p class="eyebrow">Paso 3</p><h2>Resultados y comparación</h2><p>Revise las curvas, el factor proyectado, la capacidad recomendada y los escenarios económicos.</p></div>
+    <div class="stage-heading" data-stage-heading="input"><p class="eyebrow">Paso 1</p><h2>Datos de entrada BT5B</h2><p>Complete los recibos, la curva AC, la ubicación y las características del sitio.</p></div>
+    <div class="stage-heading" data-stage-heading="evaluation"><p class="eyebrow">Paso 2</p><h2>Evaluación solar BT5B</h2><p>Compare el consumo AC con la generación fotovoltaica prevista para el mismo periodo.</p></div>
+    <div class="stage-heading" data-stage-heading="results"><p class="eyebrow">Paso 3</p><h2>Resultados BT5B</h2><p>Revise la energía, el costo y las curvas AC, solar y de consumo neto.</p></div>
     <nav class="tariff-tabs" aria-label="Opciones tarifarias">
-      <button class="tariff-tab active" data-tab="mt3Panel" type="button">MT3</button>
-      <button class="tariff-tab" data-tab="mt4Panel" type="button">MT4</button>
-      <button class="tariff-tab" data-tab="bt3Panel" type="button">BT3</button>
-      <button class="tariff-tab" data-tab="bt5bPanel" type="button">BT5B</button>
+      <button class="tariff-tab active" data-tab="bt5bPanel" type="button">BT5B</button>
     </nav>
 
-    <section id="mt3Panel" class="tab-panel active">
+    <section id="mt3Panel" class="tab-panel" hidden>
     <section class="hero-grid">
       <div class="intro">
         <p class="eyebrow">Suministro monitoreado</p>
@@ -198,7 +195,7 @@
       <section class="panel forecast-panel tariff-note"><div><p class="eyebrow">Criterio aplicado</p><h2>BT3 también utiliza calificación de potencia</h2><p>El control usa <b>FC = EHP ÷ (NHP × MD)</b>. Los importes económicos deben actualizarse con el pliego vigente de la empresa distribuidora.</p></div><a href="https://www.osinergmin.gob.pe/Tarifas/Electricidad/PliegoTarifario?Id=170000" target="_blank" rel="noopener">Consultar pliego OSINERGMIN ↗</a></section>
     </section>
 
-    <section id="bt5bPanel" class="tab-panel" hidden>
+    <section id="bt5bPanel" class="tab-panel active">
       <section class="tariff-hero bt5b-hero">
         <div><p class="eyebrow">Baja tensión · simple medición 1E</p><h1>Control BT5B</h1><p>Supervisa el consumo mensual, proyecta el recibo y evita superar el presupuesto o el umbral configurado.</p></div>
         <div class="tariff-score"><span>Costo proyectado</span><strong id="bt5Cost">S/ 0,00</strong><small id="bt5CostState">Sin evaluación</small></div>
@@ -229,21 +226,21 @@
         </article>
         <aside class="panel action-panel"><div class="panel-title"><div><p class="eyebrow">Motor BT5B</p><h2>Avisos de consumo</h2></div><span id="bt5ActionCount" class="counter">0</span></div><div id="bt5Actions" class="actions-list" aria-live="polite"></div></aside>
       </section>
-      <section class="panel forecast-panel tariff-note"><div><p class="eyebrow">Diferencia importante</p><h2>BT5B no usa factor de calificación</h2><p>Esta opción tiene medición simple de energía. El módulo controla kWh y costo proyectado; los valores tarifarios quedan editables para actualizarlos con el pliego vigente.</p></div><a href="https://www.osinergmin.gob.pe/Tarifas/Electricidad/PliegoTarifario?Id=170000" target="_blank" rel="noopener">Consultar pliego OSINERGMIN ↗</a></section>
+      <section class="panel forecast-panel tariff-note"><div><p class="eyebrow">Evaluación BT5B</p><h2>Consumo y costo del suministro</h2><p>La aplicación compara la energía AC con la generación solar y estima el consumo neto de red. Actualice los precios con el pliego vigente de su distribuidora.</p></div><a href="https://www.osinergmin.gob.pe/Tarifas/Electricidad/PliegoTarifario?Id=170000" target="_blank" rel="noopener">Consultar pliego OSINERGMIN ↗</a></section>
     </section>
 
     <section class="panel data-center">
       <div class="panel-title data-center-title">
-        <div><p class="eyebrow">Inicio de la evaluación</p><h2>Ficha del sitio y línea base</h2><p>Complete primero la información del suministro, los recibos disponibles, la curva AC y el sistema de baterías existente.</p></div>
+        <div><p class="eyebrow">Inicio de la evaluación</p><h2>Ficha del sitio y línea base BT5B</h2><p>Complete la información del suministro, los recibos disponibles y la curva AC para generar la predicción solar.</p></div>
       </div>
       <section class="assessment-intake" aria-labelledby="assessmentTitle">
-        <div class="assessment-intake-head"><div><p class="eyebrow">Inputs obligatorios</p><h3 id="assessmentTitle">Datos mínimos para iniciar</h3><p>La evaluación se habilita cuando los cuatro bloques estén completos.</p></div><span id="assessmentBadge" class="status-pill warn">Información incompleta</span></div>
+        <div class="assessment-intake-head"><div><p class="eyebrow">Datos de entrada</p><h3 id="assessmentTitle">Datos mínimos para iniciar</h3><p>La evaluación solar se habilita con el sitio, los recibos y la curva AC.</p></div><span id="assessmentBadge" class="status-pill warn">Información incompleta</span></div>
         <div class="intake-grid">
           <article class="intake-step">
             <div class="intake-step-head"><span class="intake-step-number">1</span><div><h4>Sitio, ubicación y tarifa</h4><p>Identifique el suministro y sus coordenadas para el recurso solar.</p></div></div>
             <div class="intake-fields">
               <label>Nombre del sitio<input id="evaluationSiteName" type="text" placeholder="Ej. Combapata"></label>
-              <label>Tarifa<select id="dataTariff"><option value="MT3">MT3</option><option value="MT4">MT4</option><option value="BT3">BT3</option><option value="BT5B">BT5B</option></select></label>
+              <label>Tarifa<select id="dataTariff"><option value="BT5B">BT5B</option></select></label>
               <label>Latitud<input id="siteLatitude" type="number" min="-90" max="90" step="0.000001" placeholder="-14.000000"></label>
               <label>Longitud<input id="siteLongitude" type="number" min="-180" max="180" step="0.000001" placeholder="-71.000000"></label>
             </div>
@@ -256,11 +253,11 @@
             <div class="attachment-list" id="receiptList"></div>
           </article>
           <article class="intake-step">
-            <div class="intake-step-head"><span class="intake-step-number">3</span><div><h4>Curva característica del suministro</h4><p>Cargue la curva AC base; puede ser semanal, quincenal o mensual.</p></div></div>
+            <div class="intake-step-head"><span class="intake-step-number">3</span><div><h4>Curva característica del suministro</h4><p>Cargue la curva AC base; puede ser semanal, quincenal, mensual o anual.</p></div></div>
             <div class="intake-file"><label class="file-button">Seleccionar curva AC<input id="curveBeforeFile" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"></label><small id="curveBeforeStatus" class="file-status">Sin archivo</small></div>
           </article>
           <article class="intake-step">
-            <div class="intake-step-head"><span class="intake-step-number">4</span><div><h4>Baterías y carga actual</h4><p>Registre el respaldo existente antes de calcular la ampliación necesaria.</p></div></div>
+            <div class="intake-step-head"><span class="intake-step-number">4</span><div><h4>Baterías y carga actual (opcional)</h4><p>Registre estos datos si desea documentar el respaldo existente del sitio.</p></div></div>
             <div class="intake-fields">
               <label>Tipo de batería<select id="batteryType"><option value="litio-lfp">Litio / LFP</option><option value="litio-nmc">Litio / NMC</option><option value="plomo-acido">Plomo-ácido</option><option value="otro">Otro</option></select></label>
               <label>Modelo<input id="batteryModel" type="text" value="ESM-48150B1"></label>
@@ -271,8 +268,8 @@
             </div>
           </article>
         </div>
-        <section class="economic-inputs"><h4>Tarifas para la comparación económica</h4><p>Estos valores alimentan el cálculo de costos de los escenarios.</p><div id="economicInputsHost"></div></section>
-        <div class="assessment-checks"><div id="assessmentCheckSite" class="assessment-check missing">○ Sitio y coordenadas</div><div id="assessmentCheckReceipts" class="assessment-check missing">○ Recibos declarados y cargados</div><div id="assessmentCheckCurve" class="assessment-check missing">○ Curva AC base</div><div id="assessmentCheckBattery" class="assessment-check missing">○ Baterías y carga</div></div>
+        <section class="economic-inputs is-hidden"><h4>Tarifas para la comparación económica</h4><p>Estos valores alimentan el cálculo de costos de los escenarios.</p><div id="economicInputsHost"></div></section>
+        <div class="assessment-checks"><div id="assessmentCheckSite" class="assessment-check missing">○ Sitio y coordenadas</div><div id="assessmentCheckReceipts" class="assessment-check missing">○ Recibos declarados y cargados</div><div id="assessmentCheckCurve" class="assessment-check missing">○ Curva AC base</div><div id="assessmentCheckBattery" class="assessment-check missing is-hidden">○ Baterías y carga</div></div>
         <div id="assessmentStatus" class="assessment-status">Complete los datos para habilitar el dimensionamiento.</div>
       </section>
       <section class="selection-criteria" aria-labelledby="selectionCriteriaTitle">
@@ -290,7 +287,7 @@
         </div>
         <p id="selectionCriteriaSummary" class="assessment-status">Complete los datos para validar los criterios de selección.</p>
       </section>
-      <section class="workflow-gate" aria-live="polite">
+      <section class="workflow-gate is-hidden" aria-live="polite">
         <div class="workflow-head"><div><p class="eyebrow" style="color:#dff39c">Ruta automática de evaluación</p><h3 id="workflowDecision">Validando tarifa…</h3><p id="workflowExplanation">Seleccione o cargue un recibo para definir la ruta de análisis.</p></div><span id="workflowBadge" class="status-pill">Pendiente</span></div>
         <div class="workflow-steps">
           <article class="workflow-step" id="workflowStep1"><span class="workflow-number">1</span><b>Validar tarifa</b><small>BT3, MT3 y MT4 evalúan factor. BT5B evalúa consumo y costo.</small></article>
@@ -299,7 +296,7 @@
           <article class="workflow-step" id="workflowStep4"><span class="workflow-number">4</span><b>Cerrar el ciclo con FV</b><small>Recargar sin superar el límite de potencia admitido desde la red.</small></article>
         </div>
       </section>
-      <section id="bt5bEnergyPath" class="bt5b-path is-hidden"><h3>BT5B: evaluación por consumo, costo y generación solar</h3><p>Esta tarifa no utiliza factor de calificación. La aplicación genera una curva fotovoltaica horaria para el mismo periodo de la curva AC, incluso si cubre un año.</p>
+      <section id="bt5bEnergyPath" class="bt5b-path is-hidden"><h3>BT5B: consumo, costo y generación solar</h3><p>La aplicación genera una curva fotovoltaica para el mismo periodo de la curva AC, incluso si cubre un año.</p>
         <section class="solar-prediction" aria-labelledby="bt5bSolarTitle">
           <div class="solar-prediction-head"><div><h4 id="bt5bSolarTitle">Predicción solar por ubicación</h4><p>Estimación climatológica con radiación horizontal de PVGIS. No sustituye un pronóstico meteorológico operativo.</p></div><button id="bt5bSolarRefresh" class="primary-btn" type="button">Actualizar radiación</button></div>
           <div class="solar-prediction-inputs">
