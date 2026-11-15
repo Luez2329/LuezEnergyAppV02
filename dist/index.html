@@ -328,9 +328,11 @@
         <section class="solar-prediction" aria-labelledby="bt5bSolarTitle">
           <div class="solar-prediction-head"><div><h4 id="bt5bSolarTitle">Predicción solar por ubicación</h4><p>Estimación climatológica con radiación horizontal de PVGIS. No sustituye un pronóstico meteorológico operativo.</p></div><button id="bt5bSolarRefresh" class="primary-btn" type="button">Actualizar radiación</button></div>
           <div class="solar-prediction-inputs">
-            <label>Potencia fotovoltaica a evaluar (kWp)<input id="bt5bSolarCapacity" type="number" min="0.01" step="0.01" value="1"></label>
+            <label>Escenario fotovoltaico<select id="solarScenarioSelect"><option value="reference">Curva de referencia · 1 kWp</option></select></label>
+            <label>Potencia fotovoltaica del escenario (kWp)<input id="bt5bSolarCapacity" type="number" min="0.01" step="0.01" value="1"></label>
             <label>Pérdidas totales del sistema (%)<input id="bt5bSolarLoss" type="number" min="0" max="80" step="0.1" value="14"></label>
           </div>
+          <p id="solarScenarioInfo" class="scenario-help">Seleccione un escenario después de evaluar A, B, C1 y C2. La potencia FV se calculará como número de paneles × Wp por panel.</p>
           <div class="solar-prediction-metrics">
             <div><span>Radiación promedio diaria</span><strong id="bt5bSolarDailyRadiation">—</strong><small>kWh/m²/día</small></div>
             <div><span id="bt5bSolarRadiationLabel">Radiación del periodo</span><strong id="bt5bSolarMonthlyRadiation">—</strong><small id="bt5bSolarRadiationUnit">kWh/m²/periodo</small></div>
