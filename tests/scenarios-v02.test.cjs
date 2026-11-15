@@ -10,6 +10,15 @@ for(let i=0;i<365*24;i++){
 const series=engine.prepareHourly(ac,pv,60);
 assert.equal(series.coverage,1);
 assert.equal(series.peakKw,1);
+assert.equal(series.peakRecord.energyKwh,1);
+assert.equal(series.peakRecord.intervalMinutes,60);
+assert.equal(series.peakRecord.date.getTime(),start.getTime());
+
+const fiveMinuteAC=[...ac.map(point=>({date:point.date,value:0.1})),{date:new Date(2026,0,1,0,5),value:0.6025}];
+const fiveMinutePV=fiveMinuteAC.map(point=>({date:point.date,value:0}));
+const fiveMinutePeak=engine.prepareHourly(fiveMinuteAC,fiveMinutePV,5);
+assert.ok(Math.abs(fiveMinutePeak.peakKw-7.23)<1e-9);
+assert.equal(fiveMinutePeak.peakRecord.energyKwh,0.6025);
 
 const common={areaM2:12,panelAreaM2:3,panelWp:630,designFactor:.8,dcLimitKw:null,reserveHours:6,dod:.9,chargeEff:.95,dischargeEff:.95,chargeKw:2,dischargeKw:2,panelCost:100,batteryCost:200,converterCost:100,otherCapex:0,annualOpex:0,wearRate:.01,batteryKwh:4.8,existingBatteries:1,siteLoadKw:1,pvReferenceKwp:1,energyRate:1,fixedRate:5,otherRate:0,taxRate:.18};
 const result=engine.evaluate(series,common);
