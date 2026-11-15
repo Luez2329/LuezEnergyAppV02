@@ -39,6 +39,12 @@ assert.ok(result.rows[3].backupHours<6);
 assert.ok(result.warnings.some(warning=>warning.includes('C2 reduce el respaldo')));
 assert.notEqual(result.recommended?.key,'C2');
 
+const scenarioCapacity=result.rows[0].kwp;
+const scaledPV=pv.map(point=>({date:point.date,value:point.value*scenarioCapacity}));
+const scaledSeries=engine.prepareHourly(ac,scaledPV,60);
+const scaledResult=engine.evaluate(scaledSeries,{...common,pvReferenceKwp:scenarioCapacity});
+assert.ok(Math.abs(scaledResult.rows[0].annualGrid-result.rows[0].annualGrid)<1e-6);
+
 const limited=engine.evaluate(series,{...common,areaM2:3});
 assert.equal(limited.rows[0].feasible,false);
 assert.equal(limited.rows[1].feasible,true);
