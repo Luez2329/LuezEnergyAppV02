@@ -33,8 +33,10 @@ assert.equal(result.rows[0].feasible,true);
 assert.equal(result.rows[1].feasible,false);
 assert.equal(result.rows[2].feasible,true);
 assert.ok(result.rows[2].newBatteries>=2);
+assert.ok(result.rows[2].cyclingPacks>=1);
 assert.ok(result.rows[2].backupHours>=6);
 assert.equal(result.rows[3].feasible,true);
+assert.equal(result.rows[3].cyclingPacks,common.existingBatteries);
 assert.ok(result.rows[3].backupHours<6);
 assert.ok(result.warnings.some(warning=>warning.includes('C2 reduce el respaldo')));
 assert.notEqual(result.recommended?.key,'C2');
@@ -44,6 +46,19 @@ const scaledPV=pv.map(point=>({date:point.date,value:point.value*scenarioCapacit
 const scaledSeries=engine.prepareHourly(ac,scaledPV,60);
 const scaledResult=engine.evaluate(scaledSeries,{...common,pvReferenceKwp:scenarioCapacity});
 assert.ok(Math.abs(scaledResult.rows[0].annualGrid-result.rows[0].annualGrid)<1e-6);
+
+const flowDates=[0,1,2,3].map(hour=>new Date(2025,0,1,hour));
+const flowAC=flowDates.map(date=>({date,value:1}));
+const flowPV=[3,0,3,0].map((value,index)=>({date:flowDates[index],value}));
+const flow=engine.traceIntervals(flowAC,flowPV,{...common,intervalMinutes:60},1);
+assert.ok(flow.charged>0);
+assert.ok(flow.discharged>0);
+assert.equal(flow.trace[0].charge>0,true);
+assert.equal(flow.trace[1].discharge>0,true);
+assert.ok(flow.trace.every(row=>Math.abs(row.net-(row.gridWithoutBattery-row.discharge))<1e-9));
+assert.ok(flow.trace.every(row=>row.charge<=row.excess+1e-9));
+assert.ok(flow.trace.every(row=>Math.abs(row.load-(row.direct+row.discharge+row.net))<1e-9));
+assert.ok(flow.trace.every(row=>Math.abs(row.pv-(row.direct+row.charge+row.curtailed))<1e-9));
 
 const limited=engine.evaluate(series,{...common,areaM2:3});
 assert.equal(limited.rows[0].feasible,false);
