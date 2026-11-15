@@ -288,7 +288,7 @@
         <p id="selectionCriteriaSummary" class="assessment-status">Complete los datos para validar los criterios de selección.</p>
       </section>
       <section class="scenario-inputs" aria-labelledby="scenarioInputsTitle">
-        <div class="panel-title"><div><p class="eyebrow">Diseño de alternativas BT5B</p><h2 id="scenarioInputsTitle">Paneles, respaldo y costos</h2><p>La potencia pico se toma de la curva AC. El área determina cuántos paneles de 630 Wp caben; la curva solar permite evaluar el excedente para baterías.</p></div></div>
+        <div class="panel-title"><div><p class="eyebrow">Diseño de alternativas BT5B</p><h2 id="scenarioInputsTitle">Paneles, respaldo y costos</h2><p>El pico de diseño se toma de la curva AC solo en intervalos con generación FV positiva. Se excluyen lecturas que superan en más del 30 % el percentil 95 de la carga AC en esos intervalos. El área determina cuántos paneles caben.</p></div></div>
         <div class="scenario-input-grid">
           <label>Área útil para paneles (m²)<input id="optAreaM2" type="number" min="0" step="0.1" placeholder="Ej. 40"></label>
           <label>Área ocupada por panel (m²)<input id="optPanelAreaM2" type="number" min="0.1" step="0.1" value="3"></label>
