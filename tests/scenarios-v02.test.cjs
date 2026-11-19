@@ -13,14 +13,12 @@ assert.equal(series.peakKw,1);
 assert.equal(series.peakRecord.energyKwh,1);
 assert.equal(series.peakRecord.intervalMinutes,60);
 assert.equal(series.peakRecord.date.getHours(),9);
-assert.equal(series.excludedCount,0);
 
 const fiveMinuteAC=[...ac.map(point=>({date:point.date,value:0.1})),{date:new Date(2026,0,1,0,5),value:0.6025}];
 const fiveMinutePV=fiveMinuteAC.map(point=>({date:point.date,value:0.01}));
 const fiveMinutePeak=engine.prepareHourly(fiveMinuteAC,fiveMinutePV,5);
-assert.ok(Math.abs(fiveMinutePeak.peakKw-1.2)<1e-9);
-assert.equal(fiveMinutePeak.excludedCount,1);
-assert.ok(fiveMinutePeak.peakLimitKw<7.23);
+assert.ok(Math.abs(fiveMinutePeak.peakKw-7.23)<1e-9);
+assert.ok(Math.abs(fiveMinutePeak.typicalPeakKw-1.2)<1e-9);
 
 const nightSpike=ac.map((point,index)=>({...point,value:index===1?20:1}));
 assert.equal(engine.prepareHourly(nightSpike,pv,60).peakKw,1);
