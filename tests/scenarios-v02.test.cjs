@@ -67,6 +67,17 @@ assert.ok(flow.trace.every(row=>row.charge<=row.excess+1e-9));
 assert.ok(flow.trace.every(row=>Math.abs(row.load-(row.direct+row.discharge+row.net))<1e-9));
 assert.ok(flow.trace.every(row=>Math.abs(row.pv-(row.direct+row.charge+row.curtailed))<1e-9));
 
+const solarCycleDates=[12,13,18,19].map(hour=>new Date(2025,0,2,hour));
+const solarCycleAC=solarCycleDates.map(date=>({date,value:1}));
+const solarCyclePV=[4,.5,0,0].map((value,index)=>({date:solarCycleDates[index],value}));
+const solarCycle=engine.traceIntervals(solarCycleAC,solarCyclePV,{...common,chargeKw:4,intervalMinutes:60},1);
+assert.ok(solarCycle.charged>0);
+assert.ok(solarCycle.dayDischarged>0);
+assert.ok(solarCycle.nightDischarged>0);
+assert.ok(Math.abs(solarCycle.dayDischarged+solarCycle.nightDischarged-solarCycle.discharged)<1e-9);
+assert.ok(solarCycle.trace.every(row=>row.charge<=row.excess+1e-9));
+assert.ok(solarCycle.trace.every(row=>row.soc>=-1e-9&&row.soc<=common.batteryKwh*common.dod+1e-9));
+
 const limited=engine.evaluate(series,{...common,areaM2:3});
 assert.equal(limited.rows[0].feasible,false);
 assert.equal(limited.rows[1].feasible,true);
