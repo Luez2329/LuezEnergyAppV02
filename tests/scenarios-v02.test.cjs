@@ -37,6 +37,12 @@ assert.ok(result.rows[2].newBatteries>=2);
 assert.ok(result.rows[2].cyclingPacks>=1);
 assert.ok(result.rows[2].dischargedAnnual>0);
 assert.ok(result.rows[2].chargedAnnual>result.rows[2].dischargedAnnual);
+assert.ok(result.rows[2].chargeKw>common.chargeKw);
+assert.ok(result.rows[2].dischargeKw>0);
+assert.equal(result.rows[2].chargeKw,result.rows[3].chargeKw);
+const automaticResult=engine.evaluate(series,{...common,chargeKw:.01,dischargeKw:.01});
+assert.equal(automaticResult.rows[2].chargedAnnual,result.rows[2].chargedAnnual);
+assert.equal(automaticResult.rows[2].dischargedAnnual,result.rows[2].dischargedAnnual);
 for(const row of result.rows.filter(item=>item.key==='C1'||item.key==='C2')){
  const direct=engine.directSeries(series.hours,row.panels,common.panelWp/1000,common.pvReferenceKwp,Infinity);
  assert.ok(Math.abs(row.unusedSolarAnnual+row.chargedAnnual-direct.surplus*series.annualFactor)<1e-6);
