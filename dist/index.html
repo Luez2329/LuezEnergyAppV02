@@ -302,20 +302,16 @@
           <label>Potencia máxima de carga (kW)<input id="optChargeKw" type="number" min="0.1" step="0.1" value="2"></label>
           <label>Potencia máxima de descarga (kW)<input id="optDischargeKw" type="number" min="0.1" step="0.1" value="2"></label>
         </div>
-        <h3>Costo de equipos</h3>
+        <h3>Costos de implementación</h3>
         <div class="scenario-input-grid">
-          <label>Costo por panel FV (S/ por unidad)<input id="optPanelCost" type="number" min="0" step="1" placeholder="Solo panel, sin soporte"></label>
-          <label>Costo de soporte (S/ por panel)<input id="optSupportCost" type="number" min="0" step="1" value="0" placeholder="Estructura para cada panel"></label>
-          <label>Costo de controlador solar / convertidor DC (S/ por sistema)<input id="optConverterCost" type="number" min="0" step="1" placeholder="Equipo de control e inyección DC"></label>
+          <label>Costo instalado por panel (S/)<input id="optPanelCost" type="number" min="0" step="1" placeholder="Incluya montaje y cableado por panel"></label>
           <label>Costo por batería adicional (S/)<input id="optBatteryCost" type="number" min="0" step="1" placeholder="Ej. ESM-48150B1"></label>
-        </div>
-        <h3>Otros costos y operación</h3>
-        <div class="scenario-input-grid">
+          <label>Convertidor y control DC (S/)<input id="optConverterCost" type="number" min="0" step="1" placeholder="Costo por sistema"></label>
           <label>Otros costos iniciales (S/)<input id="optOtherCapex" type="number" min="0" step="1" value="0"></label>
           <label>Operación y mantenimiento anual (S/)<input id="optAnnualOpex" type="number" min="0" step="1" value="0"></label>
           <label>Desgaste de batería (S/kWh descargado)<input id="optWearRate" type="number" min="0" step="0.001" value="0"></label>
         </div>
-        <p class="scenario-help">Inversión = paneles × (costo por panel + soporte por panel) + controlador solar + baterías adicionales + otros costos iniciales. Si antes ingresó un costo instalado por panel que ya incluía soporte, ajuste el valor del panel para evitar duplicarlo. La evaluación usa el precio de energía y el IGV BT5B del recibo.</p>
+        <p class="scenario-help">La evaluación económica usa el precio de energía y el IGV del formulario BT5B. Revise esos valores con el recibo del sitio. Si el desgaste se deja en cero, el retorno de las opciones con batería es preliminar.</p>
         <button id="runScenarioEvaluation" class="primary-btn" type="button">Evaluar escenarios A, B, C1 y C2</button>
         <div id="scenarioInputStatus" class="scenario-input-status" role="status" aria-live="polite">Para ejecutar: ingrese el área útil y la carga del sitio; cargue una curva AC anual y genere o cargue la curva FV del mismo periodo.</div>
       </section>
