@@ -29,12 +29,18 @@ assert.equal(result.nA,2);
 assert.equal(result.nArea,4);
 assert.equal(result.rows[0].feasible,true);
 assert.equal(result.rows[0].dischargedAnnual,0);
+const directA=engine.directSeries(series.hours,result.rows[0].panels,common.panelWp/1000,common.pvReferenceKwp,Infinity);
+assert.ok(Math.abs(result.rows[0].unusedSolarAnnual-directA.surplus*series.annualFactor)<1e-6);
 assert.equal(result.rows[1].feasible,false);
 assert.equal(result.rows[2].feasible,true);
 assert.ok(result.rows[2].newBatteries>=2);
 assert.ok(result.rows[2].cyclingPacks>=1);
 assert.ok(result.rows[2].dischargedAnnual>0);
 assert.ok(result.rows[2].chargedAnnual>result.rows[2].dischargedAnnual);
+for(const row of result.rows.filter(item=>item.key==='C1'||item.key==='C2')){
+ const direct=engine.directSeries(series.hours,row.panels,common.panelWp/1000,common.pvReferenceKwp,Infinity);
+ assert.ok(Math.abs(row.unusedSolarAnnual+row.chargedAnnual-direct.surplus*series.annualFactor)<1e-6);
+}
 assert.ok(result.rows[2].backupHours>=6);
 assert.equal(result.rows[3].feasible,true);
 assert.equal(result.rows[3].cyclingPacks,common.existingBatteries);
