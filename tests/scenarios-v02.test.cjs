@@ -25,7 +25,7 @@ assert.ok(fiveMinutePeak.peakLimitKw<7.23);
 const nightSpike=ac.map((point,index)=>({...point,value:index===1?20:1}));
 assert.equal(engine.prepareHourly(nightSpike,pv,60).peakKw,1);
 
-const common={areaM2:12,panelAreaM2:3,panelWp:630,designFactor:.8,dcLimitKw:null,reserveHours:6,dod:.9,chargeEff:.95,dischargeEff:.95,chargeKw:2,dischargeKw:2,panelCost:100,batteryCost:200,converterCost:100,otherCapex:0,annualOpex:0,wearRate:.01,batteryKwh:4.8,existingBatteries:1,siteLoadKw:1,pvReferenceKwp:1,energyRate:1,fixedRate:5,otherRate:0,taxRate:.18};
+const common={areaM2:12,panelAreaM2:3,panelWp:630,designFactor:.8,dcLimitKw:null,reserveHours:6,dod:.9,chargeEff:.95,dischargeEff:.95,chargeKw:2,dischargeKw:2,panelCost:100,supportCost:0,batteryCost:200,converterCost:100,otherCapex:0,annualOpex:0,wearRate:.01,batteryKwh:4.8,existingBatteries:1,siteLoadKw:1,pvReferenceKwp:1,energyRate:1,fixedRate:5,otherRate:0,taxRate:.18};
 const result=engine.evaluate(series,common);
 assert.equal(result.nA,2);
 assert.equal(result.nArea,4);
@@ -62,6 +62,9 @@ assert.ok(flow.trace.every(row=>Math.abs(row.net-(row.gridWithoutBattery-row.dis
 assert.ok(flow.trace.every(row=>row.charge<=row.excess+1e-9));
 assert.ok(flow.trace.every(row=>Math.abs(row.load-(row.direct+row.discharge+row.net))<1e-9));
 assert.ok(flow.trace.every(row=>Math.abs(row.pv-(row.direct+row.charge+row.curtailed))<1e-9));
+
+const withSupports=engine.evaluate(series,{...common,supportCost:25});
+assert.equal(withSupports.rows[0].capex-result.rows[0].capex,result.rows[0].panels*25);
 
 const limited=engine.evaluate(series,{...common,areaM2:3});
 assert.equal(limited.rows[0].feasible,false);
